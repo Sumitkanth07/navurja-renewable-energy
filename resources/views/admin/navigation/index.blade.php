@@ -1,0 +1,2 @@
+@extends('layouts.admin')
+@section('content')<div class="topbar"><h1>Navigation</h1><a class="button" href="{{ route('admin.navigation.create') }}">Add Item</a></div><table><tr><th>Label</th><th>URL</th><th>Order</th><th></th></tr>@foreach($items as $item)<tr><td>{{ $item->label }}</td><td>{{ $item->url }}</td><td>{{ $item->sort_order }}</td><td><a href="{{ route('admin.navigation.edit',$item) }}">Edit</a><form method="post" action="{{ route('admin.navigation.destroy',$item) }}">@csrf @method('delete')<button>Delete</button></form></td></tr>@endforeach</table>@endsection

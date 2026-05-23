@@ -1,0 +1,2 @@
+@extends('layouts.admin')
+@section('content')<h1>Dashboard</h1><div class="stats"><div><strong>{{ $blogs }}</strong><span>Blog posts</span></div><div><strong>{{ $projects }}</strong><span>Projects</span></div><div><strong>{{ $services }}</strong><span>Services</span></div></div><p class="panel">Your renewable energy CMS is ready. Use the left menu to update branding, homepage sections, navigation, projects, blogs, calculator settings, footer data, and redirects.</p>@endsection

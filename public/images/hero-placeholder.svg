@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Renewable energy placeholder</title>
+  <desc id="desc">Abstract clean energy landscape with solar panels and green hills.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#e9f9e6"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" x2="1">
+      <stop offset="0" stop-color="#0c6b3f"/>
+      <stop offset="1" stop-color="#71c55d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky)"/>
+  <circle cx="925" cy="210" r="94" fill="#ffd56a"/>
+  <path d="M0 630 C220 500 360 575 520 520 C720 448 850 510 1200 410 L1200 900 L0 900 Z" fill="#dff3dc"/>
+  <path d="M0 710 C210 610 410 680 610 610 C820 535 980 600 1200 525 L1200 900 L0 900 Z" fill="#bde8b4"/>
+  <g transform="translate(238 368) skewX(-18)">
+    <rect width="520" height="300" rx="22" fill="url(#panel)"/>
+    <g stroke="#d7ffe0" stroke-width="5" opacity=".55">
+      <path d="M0 75 H520M0 150 H520M0 225 H520"/>
+      <path d="M104 0 V300M208 0 V300M312 0 V300M416 0 V300"/>
+    </g>
+  </g>
+  <rect x="530" y="670" width="120" height="35" rx="8" fill="#0c6b3f"/>
+  <path d="M590 668 L505 820 H675 Z" fill="#0c6b3f" opacity=".85"/>
+</svg>

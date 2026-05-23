@@ -1,0 +1,1 @@
+if(document.querySelector('#content')){tinymce.init({selector:'#content',height:500,plugins:'image link lists table code',toolbar:'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link image | table | code',license_key:'gpl',images_upload_url:'/admin/upload-image',automatic_uploads:true,convert_urls:false})}
