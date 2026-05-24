@@ -83,7 +83,7 @@
 
                 <img
                     class="preview"
-                    src="{{ asset('storage/app/public/' . $heroPreview) }}"
+                    src="{{ asset('storage/' . $heroPreview) }}"
                     alt="Hero preview"
                     style="
                         width:220px;

@@ -26,7 +26,7 @@ $navItems = NavigationItem::where('is_active', true)->orderBy('sort_order')->get
     <meta property="og:url" content="{{ url()->current() }}">
 
     @if($logo)
-        <link rel="icon" type="image/png" href="{{ asset('storage/app/public/' . $logo) }}">
+        <link rel="icon" type="image/png" href="{{ asset('storage/' . $logo) }}">
     @endif
 
     <link rel="stylesheet" href="{{ asset('css/site.css') }}">
@@ -130,7 +130,7 @@ $navItems = NavigationItem::where('is_active', true)->orderBy('sort_order')->get
 <header class="site-header">
     <a class="brand navbar-brand" href="{{ route('home') }}">
         @if($logo)
-            <img src="{{ asset('storage/app/public/' . $logo) }}" alt="{{ $siteName }} logo">
+            <img src="{{ asset('storage/' . $logo) }}" alt="{{ $siteName }} logo">
         @else
             <span class="brand-mark">N</span>
         @endif

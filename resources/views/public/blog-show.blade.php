@@ -34,7 +34,7 @@
 
         <img
             class="article-image"
-            src="{{ asset('storage/app/public/' . $post->featured_image) }}"
+            src="{{ asset('storage/' . $post->featured_image) }}"
             alt="{{ $post->title }}"
         >
 
