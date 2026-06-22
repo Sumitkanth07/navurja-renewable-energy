@@ -17,7 +17,7 @@ $location = Location::first();
 $headerItems = NavigationItem::where('is_active', true)->where('menu_position', 'header')->whereNull('parent_id')->with(['children' => function($q) { $q->where('is_active', true); }])->orderBy('sort_order')->get();
 $footerItems = NavigationItem::where('is_active', true)->where('menu_position', 'footer')->orderBy('sort_order')->get();
 
-$cookieEnabled = Setting::getValue('cookie_consent_enabled', '0');
+$cookieEnabled = Setting::getValue('cookie_consent_enabled', '1');
 $cookieTitle = Setting::getValue('cookie_popup_title', 'We Value Your Privacy');
 $cookieContent = Setting::getValue('cookie_popup_content', 'This website uses cookies to ensure you get the best experience.');
 $cookieAccept = Setting::getValue('cookie_accept_text', 'Accept');
@@ -222,7 +222,7 @@ $defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/logo.png');
 <footer class="footer">
     <div>
         <h3>{{ $footer->company_name ?? 'Navurja' }}</h3>
-        <p>{{ $location->address ?? $footer->address ?? 'New Delhi, India' }}</p>
+        <p>{{ $location?->address ?? $footer?->address ?? 'New Delhi, India' }}</p>
         
         <div class="social-links">
             @if($facebook_url)<a href="{{ $facebook_url }}" target="_blank" rel="noopener noreferrer">Facebook</a>@endif
@@ -237,8 +237,8 @@ $defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/logo.png');
         @endforeach
     </div>
     <div>
-        <a href="mailto:{{ $location->email ?? $footer->email ?? 'info@navurja.com' }}">{{ $location->email ?? $footer->email ?? 'info@navurja.com' }}</a><br>
-        <a href="tel:{{ $location->phone ?? $footer->phone ?? '+919876543210' }}">{{ $location->phone ?? $footer->phone ?? '+91 9876543210' }}</a>
+        <a href="mailto:{{ $location?->email ?? $footer?->email ?? 'info@navurja.com' }}">{{ $location?->email ?? $footer?->email ?? 'info@navurja.com' }}</a><br>
+        <a href="tel:{{ $location?->phone ?? $footer?->phone ?? '+919876543210' }}">{{ $location?->phone ?? $footer?->phone ?? '+91 9876543210' }}</a>
         <p style="margin-top: 10px;">{{ $footer->copyright_text ?? 'Copyright '.date('Y').' Navurja. All rights reserved.' }}</p>
     </div>
 </footer>
@@ -289,7 +289,7 @@ $defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/logo.png');
     }
 
     function handleCookie(status) {
-        setCookie('cookie_consent', status, {{ $cookieExpiry }});
+        setCookie('cookie_consent', status, {{ (int) ($cookieExpiry ?: 30) }});
         const banner = document.getElementById('cookieConsent');
         banner.classList.remove('show');
         setTimeout(() => {

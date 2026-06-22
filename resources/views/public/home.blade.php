@@ -159,31 +159,34 @@
         
         <div style="display:flex; flex-direction:column; gap:18px; margin-top:30px; margin-bottom:30px; font-size:18px; line-height:1.6;">
             <div>
-                📧 <a href="mailto:{{ $location->email ?? 'info@navurja.com' }}">{{ $location->email ?? 'info@navurja.com' }}</a>
+                📧 <a href="mailto:{{ $location?->email ?? 'info@navurja.com' }}">{{ $location?->email ?? 'info@navurja.com' }}</a>
             </div>
             <div>
-                📞 {{ $location->phone ?? '+91 9876543210' }} @if(!empty($location->alt_phone)) / {{ $location->alt_phone }} @endif
+                📞 {{ $location?->phone ?? '+91 9876543210' }} @if(!empty($location?->alt_phone)) / {{ $location->alt_phone }} @endif
             </div>
             <div>
-                📍 {{ $location->address ?? 'New Delhi, India' }}
+                📍 {{ $location?->address ?? 'New Delhi, India' }}
             </div>
-            @if(!empty($location->working_hours))
+            @if(!empty($location?->working_hours))
                 <div>
                     ⏰ Hours: {{ $location->working_hours }}
+                </div>
+            @else
+                <div>
+                    ⏰ Hours: Mon - Sat: 9:00 AM - 6:00 PM
                 </div>
             @endif
         </div>
 
-        @if(!empty($location->map_url))
-            @if(str_contains($location->map_url, '<iframe'))
-                <div class="map-embed-container" style="border-radius: 8px; overflow: hidden; margin-top: 15px;">
-                    {!! $location->map_url !!}
-                </div>
-            @else
-                <iframe src="{{ $location->map_url }}" width="100%" height="250" style="border:0; border-radius: 8px; margin-top: 15px;" allowfullscreen="" loading="lazy"></iframe>
-            @endif
+        @php
+            $mapUrl = !empty($location?->map_url) ? $location->map_url : 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.135688537682!2d77.2183204!3d28.6256847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd34208a05c3%3A0xcf8b88f1abeb2145!2sConnaught%20Place%2C%20New%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin';
+        @endphp
+        @if(str_contains($mapUrl, '<iframe'))
+            <div class="map-embed-container" style="border-radius: 8px; overflow: hidden; margin-top: 15px;">
+                {!! $mapUrl !!}
+            </div>
         @else
-            <div class="map">Map Placeholder</div>
+            <iframe src="{{ $mapUrl }}" width="100%" height="250" style="border:0; border-radius: 8px; margin-top: 15px;" allowfullscreen="" loading="lazy"></iframe>
         @endif
     </div>
 
