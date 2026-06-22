@@ -15,13 +15,21 @@ class SettingController extends Controller
     public function edit()
     {
         return view('admin.settings.edit', [
+
             'footer' => FooterSetting::first(),
+
             'settings' => (object) [
+
                 'site_name' => Setting::getValue('site_name', 'Navurja'),
+
                 'tagline' => Setting::getValue('tagline', 'Renewable Energy Solutions'),
+
                 'primary_color' => Setting::getValue('primary_color', '#0c6b3f'),
+
                 'secondary_color' => Setting::getValue('secondary_color', '#71c55d'),
+
                 'logo' => Setting::getValue('logo'),
+<<<<<<< HEAD
                 'favicon' => Setting::getValue('favicon'),
                 'facebook_url' => Setting::getValue('facebook_url'),
                 'twitter_url' => Setting::getValue('twitter_url'),
@@ -33,28 +41,46 @@ class SettingController extends Controller
                 'cookie_accept_text' => Setting::getValue('cookie_accept_text', 'Accept'),
                 'cookie_reject_text' => Setting::getValue('cookie_reject_text', 'Decline'),
                 'cookie_consent_expiry' => Setting::getValue('cookie_consent_expiry', '30'),
+=======
+
+>>>>>>> 08199bb0a324947ac31950b6abf03bd01005c56b
             ],
+
         ]);
     }
 
     public function update(Request $request)
     {
         $data = $request->validate([
+
             'site_name' => 'required|max:150',
+
             'tagline' => 'required|max:180',
+
             'primary_color' => 'required|max:20',
+
             'secondary_color' => 'required|max:20',
+
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:2048',
+<<<<<<< HEAD
             'favicon' => 'nullable|image|mimes:ico,png,webp|max:1024',
             'facebook_url' => 'nullable|url|max:255',
             'twitter_url' => 'nullable|url|max:255',
             'linkedin_url' => 'nullable|url|max:255',
             'instagram_url' => 'nullable|url|max:255',
+=======
+
+>>>>>>> 08199bb0a324947ac31950b6abf03bd01005c56b
             'company_name' => 'required|max:150',
+
             'email' => 'required|email',
+
             'phone' => 'required|max:40',
+
             'address' => 'required|max:400',
+
             'copyright_text' => 'required|max:200',
+<<<<<<< HEAD
             'cookie_popup_title' => 'nullable|string|max:150',
             'cookie_popup_content' => 'nullable|string|max:400',
             'cookie_accept_text' => 'nullable|string|max:50',
@@ -69,15 +95,75 @@ class SettingController extends Controller
         }
         if ($path = $this->uploadImage($request->file('logo'))) Setting::putValue('logo', $path);
         if ($path = $this->uploadImage($request->file('favicon'))) Setting::putValue('favicon', $path);
+=======
 
-        FooterSetting::query()->updateOrCreate(['id' => 1], [
-            'company_name' => $data['company_name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'address' => $data['address'],
-            'copyright_text' => $data['copyright_text'],
+            'facebook' => 'nullable|max:255',
+
+            'instagram' => 'nullable|max:255',
+
+            'linkedin' => 'nullable|max:255',
+
+            'whatsapp' => 'nullable|max:255',
+
+            'map_iframe' => 'nullable',
+
         ]);
 
+        foreach ([
+            'site_name',
+            'tagline',
+            'primary_color',
+            'secondary_color'
+        ] as $key) {
+
+            Setting::putValue($key, $data[$key]);
+
+        }
+>>>>>>> 08199bb0a324947ac31950b6abf03bd01005c56b
+
+        if ($path = $this->uploadImage($request->file('logo'))) {
+
+<<<<<<< HEAD
         return back()->with('success', 'Settings saved successfully.');
+=======
+            Setting::putValue('logo', $path);
+
+        }
+
+        FooterSetting::query()->updateOrCreate(
+
+            ['id' => 1],
+
+            [
+
+                'company_name' => $data['company_name'],
+
+                'email' => $data['email'],
+
+                'phone' => $data['phone'],
+
+                'address' => $data['address'],
+
+                'copyright_text' => $data['copyright_text'],
+
+                'facebook' => $data['facebook'] ?? null,
+
+                'instagram' => $data['instagram'] ?? null,
+
+                'linkedin' => $data['linkedin'] ?? null,
+
+                'whatsapp' => $data['whatsapp'] ?? null,
+
+                'map_iframe' => $data['map_iframe'] ?? null,
+
+            ]
+
+        );
+
+        return back()->with(
+            'success',
+            'Branding and footer saved successfully.'
+        );
+>>>>>>> 08199bb0a324947ac31950b6abf03bd01005c56b
     }
 }
