@@ -26,5 +26,34 @@
 <section id="projects" class="section"><span class="eyebrow">Projects</span><h2>Recent Clean Energy Work</h2><div class="grid three">@foreach($projects as $project)<article class="project-card">@if($project->image)<img src="{{ asset('storage/'.$project->image) }}" alt="{{ $project->title }}">@endif<h3>{{ $project->title }}</h3><p>{{ $project->description }}</p></article>@endforeach</div></section>
 <section id="why" class="section split deep"><div><span class="eyebrow">Why Choose Us</span><h2>{{ $sections['why']->title ?? 'Premium guidance without unnecessary complexity.' }}</h2></div><ul class="ticks"><li>Renewable-first strategy</li><li>Transparent lifecycle savings</li><li>Responsive support</li><li>Hostinger-ready digital CMS</li></ul></section>
 <section class="section soft"><span class="eyebrow">Insights</span><h2>Renewable Energy Blog</h2><div class="grid three">@foreach($posts as $post)<a class="card link-card" href="{{ route('blog.show', $post->slug) }}"><h3>{{ $post->title }}</h3><p>{{ $post->meta_description }}</p></a>@endforeach</div></section>
-<section id="contact" class="section contact"><div><span class="eyebrow">Contact</span><h2>Let's plan your clean energy upgrade.</h2><p>Email, call, or send the form. The map panel can be replaced with your live location embed later.</p><div class="map">Map Placeholder</div></div><form method="post" action="{{ route('contact.submit') }}">@csrf<input name="name" placeholder="Your name" required><input type="email" name="email" placeholder="Email address" required><textarea name="message" placeholder="Tell us about your project" required></textarea><button class="btn">Send Message</button></form></section>
+<section id="contact" class="section contact">
+    <div>
+        <span class="eyebrow">Contact</span>
+        <h2>Let's plan your clean energy upgrade.</h2>
+        <div style="margin-bottom: 20px; line-height: 1.6;">
+            <strong>Address:</strong> {{ $location->address ?? 'New Delhi, India' }}<br>
+            <strong>Phone:</strong> {{ $location->phone ?? '+91 9876543210' }} @if(!empty($location->alt_phone)) / {{ $location->alt_phone }} @endif<br>
+            <strong>Email:</strong> <a href="mailto:{{ $location->email ?? 'info@navurja.com' }}">{{ $location->email ?? 'info@navurja.com' }}</a><br>
+            @if(!empty($location->working_hours))<strong>Hours:</strong> {{ $location->working_hours }}@endif
+        </div>
+        @if(!empty($location->map_url))
+            @if(str_contains($location->map_url, '<iframe'))
+                <div class="map-embed-container" style="border-radius: 8px; overflow: hidden; margin-top: 15px;">
+                    {!! $location->map_url !!}
+                </div>
+            @else
+                <iframe src="{{ $location->map_url }}" width="100%" height="250" style="border:0; border-radius: 8px; margin-top: 15px;" allowfullscreen="" loading="lazy"></iframe>
+            @endif
+        @else
+            <div class="map">Map Placeholder</div>
+        @endif
+    </div>
+    <form method="post" action="{{ route('contact.submit') }}">
+        @csrf
+        <input name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="Email address" required>
+        <textarea name="message" placeholder="Tell us about your project" required></textarea>
+        <button class="btn">Send Message</button>
+    </form>
+</section>
 @endsection

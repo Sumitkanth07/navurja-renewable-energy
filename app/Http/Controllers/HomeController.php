@@ -18,6 +18,7 @@ class HomeController extends Controller
             'services' => Service::where('is_active', true)->orderBy('sort_order')->get(),
             'projects' => Project::where('is_active', true)->latest()->take(6)->get(),
             'posts' => Blog::where('is_published', true)->latest('published_at')->take(3)->get(),
+            'location' => \App\Models\Location::first(),
         ]);
     }
 

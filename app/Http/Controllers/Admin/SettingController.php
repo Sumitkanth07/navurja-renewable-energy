@@ -22,6 +22,17 @@ class SettingController extends Controller
                 'primary_color' => Setting::getValue('primary_color', '#0c6b3f'),
                 'secondary_color' => Setting::getValue('secondary_color', '#71c55d'),
                 'logo' => Setting::getValue('logo'),
+                'favicon' => Setting::getValue('favicon'),
+                'facebook_url' => Setting::getValue('facebook_url'),
+                'twitter_url' => Setting::getValue('twitter_url'),
+                'linkedin_url' => Setting::getValue('linkedin_url'),
+                'instagram_url' => Setting::getValue('instagram_url'),
+                'cookie_consent_enabled' => Setting::getValue('cookie_consent_enabled', '0'),
+                'cookie_popup_title' => Setting::getValue('cookie_popup_title', 'We use cookies'),
+                'cookie_popup_content' => Setting::getValue('cookie_popup_content', 'This website uses cookies to ensure you get the best experience.'),
+                'cookie_accept_text' => Setting::getValue('cookie_accept_text', 'Accept'),
+                'cookie_reject_text' => Setting::getValue('cookie_reject_text', 'Decline'),
+                'cookie_consent_expiry' => Setting::getValue('cookie_consent_expiry', '30'),
             ],
         ]);
     }
@@ -34,17 +45,30 @@ class SettingController extends Controller
             'primary_color' => 'required|max:20',
             'secondary_color' => 'required|max:20',
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:2048',
+            'favicon' => 'nullable|image|mimes:ico,png,webp|max:1024',
+            'facebook_url' => 'nullable|url|max:255',
+            'twitter_url' => 'nullable|url|max:255',
+            'linkedin_url' => 'nullable|url|max:255',
+            'instagram_url' => 'nullable|url|max:255',
             'company_name' => 'required|max:150',
             'email' => 'required|email',
             'phone' => 'required|max:40',
             'address' => 'required|max:400',
             'copyright_text' => 'required|max:200',
+            'cookie_popup_title' => 'nullable|string|max:150',
+            'cookie_popup_content' => 'nullable|string|max:400',
+            'cookie_accept_text' => 'nullable|string|max:50',
+            'cookie_reject_text' => 'nullable|string|max:50',
+            'cookie_consent_expiry' => 'nullable|integer|min:1',
         ]);
 
-        foreach (['site_name', 'tagline', 'primary_color', 'secondary_color'] as $key) {
-            Setting::putValue($key, $data[$key]);
+        $data['cookie_consent_enabled'] = $request->has('cookie_consent_enabled') ? '1' : '0';
+
+        foreach (['site_name', 'tagline', 'primary_color', 'secondary_color', 'facebook_url', 'twitter_url', 'linkedin_url', 'instagram_url', 'cookie_consent_enabled', 'cookie_popup_title', 'cookie_popup_content', 'cookie_accept_text', 'cookie_reject_text', 'cookie_consent_expiry'] as $key) {
+            Setting::putValue($key, $data[$key] ?? '');
         }
         if ($path = $this->uploadImage($request->file('logo'))) Setting::putValue('logo', $path);
+        if ($path = $this->uploadImage($request->file('favicon'))) Setting::putValue('favicon', $path);
 
         FooterSetting::query()->updateOrCreate(['id' => 1], [
             'company_name' => $data['company_name'],
@@ -54,6 +78,6 @@ class SettingController extends Controller
             'copyright_text' => $data['copyright_text'],
         ]);
 
-        return back()->with('success', 'Branding and footer saved successfully.');
+        return back()->with('success', 'Settings saved successfully.');
     }
 }
