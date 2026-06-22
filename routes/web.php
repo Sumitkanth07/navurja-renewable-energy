@@ -79,5 +79,15 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::post('upload-image', [UploadController::class, 'store'])->name('upload.image');
 });
 
+// Fallback storage route for hosting environments where symbolic links are disabled
+Route::get('storage/{path}', function ($path) {
+    $path = str_replace('../', '', $path);
+    $fullPath = storage_path('app/public/' . $path);
+    if (!file_exists($fullPath) || is_dir($fullPath)) {
+        abort(404);
+    }
+    return response()->file($fullPath);
+})->where('path', '.*')->name('storage.local');
+
 // Fallback route for dynamic pages
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');
