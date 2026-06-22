@@ -24,7 +24,7 @@ $cookieAccept = Setting::getValue('cookie_accept_text', 'Accept');
 $cookieReject = Setting::getValue('cookie_reject_text', 'Decline');
 $cookieExpiry = Setting::getValue('cookie_consent_expiry', '30');
 
-$defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/default-og.png');
+$defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/logo.png');
 @endphp
 <!doctype html>
 <html lang="en">
@@ -43,9 +43,9 @@ $defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/default-og.p
     <link rel="canonical" href="@yield('canonical')">
     @endif
     
-    @if($favicon)
-    <link rel="icon" href="{{ asset('storage/' . $favicon) }}">
-    @endif
+    <link rel="icon" type="image/x-icon" href="{{ $favicon ? asset('storage/' . $favicon) : asset('favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ $favicon ? asset('storage/' . $favicon) : asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ $favicon ? asset('storage/' . $favicon) : asset('favicon.ico') }}">
 
     <!-- Open Graph Tags -->
     <meta property="og:site_name" content="{{ $siteName }}">
@@ -69,7 +69,7 @@ $defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/default-og.p
       "@type": "Organization",
       "name": "{{ $siteName }}",
       "url": "{{ url('/') }}",
-      "logo": "{{ $logo ? asset('storage/' . $logo) : '' }}"
+      "logo": "{{ $logo ? asset('storage/' . $logo) : asset('images/logo.png') }}"
     }
     </script>
     <script type="application/ld+json">
@@ -179,6 +179,8 @@ $defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/default-og.p
     <a class="brand navbar-brand" href="{{ route('home') }}">
         @if($logo)
             <img src="{{ asset('storage/' . $logo) }}" alt="{{ $siteName }} logo">
+        @elseif(file_exists(public_path('images/logo.png')))
+            <img src="{{ asset('images/logo.png') }}" alt="{{ $siteName }} logo">
         @else
             <span class="brand-mark">N</span>
         @endif
