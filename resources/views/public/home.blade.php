@@ -40,9 +40,9 @@
     <figure class="hero-media hero-image">
 
         <img
-            src="{{ $heroImage ? asset('storage/app/public/' . $heroImage) : asset('images/hero-placeholder.svg') }}"
-            alt="Renewable energy solutions"
-        >
+    src="{{ $heroImage ? asset('storage/' . $heroImage) : asset('images/hero-placeholder.svg') }}"
+    alt="Renewable energy solutions"
+>
 
     </figure>
 
@@ -71,7 +71,7 @@
         <div class="section-image">
 
             <img
-                src="{{ asset('storage/app/public/' . $sections['about']->image) }}"
+                src="{{ asset('storage/' . $sections['about']->image) }}"
                 alt="About Navurja"
                 style="width:100%; border-radius:20px;"
             >
@@ -105,7 +105,7 @@
                 @if($service->image)
 
                     <img
-                        src="{{ asset('storage/app/public/' . $service->image) }}"
+                        src="{{ asset('storage/' . $service->image) }}"
                         alt="{{ $service->title }}"
                         style="width:100%; border-radius:16px; margin-bottom:15px;"
                     >
@@ -147,7 +147,7 @@
                 @if($project->image)
 
                     <img
-                        src="{{ asset('storage/app/public/' . $project->image) }}"
+                        src="{{ asset('storage/' . $project->image) }}"
                         alt="{{ $project->title }}"
                         style="width:100%; border-radius:16px; margin-bottom:15px;"
                     >
@@ -193,7 +193,7 @@
         <div class="section-image">
 
             <img
-                src="{{ asset('storage/app/public/' . $sections['why']->image) }}"
+                src="{{ asset('storage/' . $sections['why']->image) }}"
                 alt="Why Choose Navurja"
                 style="width:100%; border-radius:20px;"
             >
@@ -220,10 +220,10 @@
 
             <a class="card link-card" href="{{ route('blog.show', $post->slug) }}">
 
-                @if($post->image)
+                @if($post->featured_image)
 
                     <img
-                        src="{{ asset('storage/app/public/' . $post->image) }}"
+                        src="{{ asset('storage/' . $post->featured_image) }}"
                         alt="{{ $post->title }}"
                         style="width:100%; border-radius:16px; margin-bottom:15px;"
                     >
@@ -255,15 +255,11 @@
         </span>
 
         <h2>
-
             {{ $sections['contact']->title ?? "Let's Plan Your Clean Energy Upgrade" }}
-
         </h2>
 
         <p>
-
             {{ $sections['contact']->content ?? 'Connect with Navurja Renewable Energy Solutions for renewable consultation and smart energy planning.' }}
-
         </p>
 
         <div
@@ -297,7 +293,7 @@
         @if(isset($sections['contact']) && $sections['contact']->image)
 
             <img
-                src="{{ asset('storage/app/public/' . $sections['contact']->image) }}"
+                src="{{ asset('storage/' . $sections['contact']->image) }}"
                 alt="Contact Navurja"
                 style="
                     width:100%;

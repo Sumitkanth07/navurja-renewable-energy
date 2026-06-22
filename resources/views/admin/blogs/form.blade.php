@@ -91,7 +91,7 @@
 
         <img
             class="preview"
-            src="{{ asset('storage/app/public/' . $post->featured_image) }}"
+            src="{{ asset('storage/' . $post->featured_image) }}"
             alt="Blog preview"
             style="
                 width:240px;

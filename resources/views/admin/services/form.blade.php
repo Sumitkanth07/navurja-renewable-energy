@@ -55,7 +55,7 @@
         @if($service->image)
 
             <img
-                src="{{ asset('storage/app/public/' . $service->image) }}"
+                src="{{ asset('storage/' . $service->image) }}"
                 style="width:220px; border-radius:16px; margin-top:15px;"
             >
 

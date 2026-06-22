@@ -77,7 +77,7 @@
         <div class="logo-preview">
 
             <img
-                src="{{ asset('storage/app/public/' . $settings->logo) }}"
+                src="{{ asset('storage/' . $settings->logo) }}"
                 alt="Logo Preview"
                 style="width:180px; border-radius:14px;"
             >
