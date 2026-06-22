@@ -66,6 +66,10 @@
             <article class="card">
                 @if($service->image)
                     <img src="{{ asset('storage/' . $service->image) }}" alt="{{ $service->title }}" style="width:100%; border-radius:16px; margin-bottom:15px;">
+                @elseif($service->icon)
+                    <div class="service-icon" style="font-size: 3.5rem; line-height: 1; margin-bottom: 20px; color: var(--primary);">
+                        {{ $service->icon }}
+                    </div>
                 @endif
                 <h3>
                     {{ $service->title }}

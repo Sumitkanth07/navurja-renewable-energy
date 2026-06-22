@@ -29,10 +29,16 @@ const links = [...document.querySelectorAll('.site-nav a')];
 const sections = [...document.querySelectorAll('section[id]')];
 window.addEventListener('scroll', () => {
   let current = '';
+  const top = window.scrollY || document.documentElement.scrollTop;
   sections.forEach((section) => {
-    if (scrollY >= section.offsetTop - 120) current = '#' + section.id;
+    if (top >= section.offsetTop - 120) current = '#' + section.id;
   });
-  links.forEach((link) => link.classList.toggle('active', link.getAttribute('href').endsWith(current)));
+  links.forEach((link) => {
+    const href = link.getAttribute('href');
+    if (href) {
+      link.classList.toggle('active', href.endsWith(current));
+    }
+  });
 });
 
 const calc = document.querySelector('.results');
