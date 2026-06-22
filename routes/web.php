@@ -21,7 +21,18 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CalculatorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
-use Illuminate\Support\Facades\Route;
+// Self-healing symlink check for production/local environments
+try {
+    $storageLinkPath = public_path('storage');
+    if (is_link($storageLinkPath) && !file_exists($storageLinkPath)) {
+        @unlink($storageLinkPath);
+    }
+    if (!file_exists($storageLinkPath)) {
+        @symlink(storage_path('app/public'), $storageLinkPath);
+    }
+} catch (\Throwable $e) {
+    // Silently catch to prevent routing exceptions
+}
 
 Route::middleware('redirects')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
