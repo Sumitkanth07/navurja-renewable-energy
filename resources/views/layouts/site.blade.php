@@ -232,9 +232,14 @@ $defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/logo.png');
         </div>
     </div>
     <div class="footer-links" style="display:flex; flex-direction:column; gap:5px;">
-        @foreach($footerItems as $item)
+        @forelse($footerItems as $item)
             <a href="{{ str_starts_with($item->url, '#') ? route('home').$item->url : url($item->url) }}">{{ $item->label }}</a>
-        @endforeach
+        @empty
+            <a href="{{ url('/privacy-policy') }}">Privacy Policy</a>
+            <a href="{{ url('/terms-and-conditions') }}">Terms & Conditions</a>
+            <a href="{{ url('/cookie-policy') }}">Cookie Policy</a>
+            <a href="{{ url('/dmca-policy') }}">DMCA Policy</a>
+        @endforelse
     </div>
     <div>
         <a href="mailto:{{ $location?->email ?? $footer?->email ?? 'info@navurja.com' }}">{{ $location?->email ?? $footer?->email ?? 'info@navurja.com' }}</a><br>
