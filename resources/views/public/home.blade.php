@@ -27,6 +27,7 @@
             </a>
         </div>
     </div>
+    <figure class="hero-media hero-image">
         <img src="{{ $heroImage ? asset('storage/' . $heroImage) : asset('images/hero-placeholder.svg') }}" alt="Renewable energy solutions">
     </figure>
 </section>
@@ -44,6 +45,7 @@
         </p>
     </div>
     @if(isset($sections['about']) && $sections['about']->image)
+        <div class="section-image">
             <img src="{{ asset('storage/' . $sections['about']->image) }}" alt="About Navurja" style="width:100%; border-radius:20px;">
         </div>
     @endif
@@ -62,6 +64,7 @@
     <div class="grid three">
         @foreach($services as $service)
             <article class="card">
+                @if($service->image)
                     <img src="{{ asset('storage/' . $service->image) }}" alt="{{ $service->title }}" style="width:100%; border-radius:16px; margin-bottom:15px;">
                 @elseif($service->icon)
                     <div class="service-icon" style="font-size: 3.5rem; line-height: 1; margin-bottom: 20px; color: var(--primary);">
@@ -89,6 +92,7 @@
     <div class="grid three">
         @foreach($projects as $project)
             <article class="project-card">
+                @if($project->image)
                     <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" style="width:100%; border-radius:16px; margin-bottom:15px;">
                 @endif
                 <h3>
@@ -115,6 +119,7 @@
         </p>
     </div>
     @if(isset($sections['why']) && $sections['why']->image)
+        <div class="section-image">
             <img src="{{ asset('storage/' . $sections['why']->image) }}" alt="Why Choose Navurja" style="width:100%; border-radius:20px;">
         </div>
     @endif

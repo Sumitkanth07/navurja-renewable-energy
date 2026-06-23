@@ -64,7 +64,7 @@ $defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/logo.png');
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
+      "@@context": "https://schema.org",
       "@type": "Organization",
       "name": "{{ $siteName }}",
       "url": "{{ url('/') }}",
@@ -73,7 +73,7 @@ $defaultOgImage = $logo ? asset('storage/' . $logo) : asset('images/logo.png');
     </script>
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
+      "@@context": "https://schema.org",
       "@type": "WebSite",
       "name": "{{ $siteName }}",
       "url": "{{ url('/') }}"

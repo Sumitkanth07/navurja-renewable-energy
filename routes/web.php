@@ -89,5 +89,31 @@ Route::get('storage/{path}', function ($path) {
     return response()->file($fullPath);
 })->where('path', '.*')->name('storage.local');
 
+// Temporary deployment helper to clear caches and run migrations on production
+Route::get('/debug-deploy-help', function() {
+    try {
+        $output = "";
+        
+        // Clear view cache
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        $output .= "View cache cleared: " . \Illuminate\Support\Facades\Artisan::output() . "<br>";
+        
+        // Clear config and cache
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        $output .= "Config cache cleared: " . \Illuminate\Support\Facades\Artisan::output() . "<br>";
+        
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        $output .= "Cache cleared: " . \Illuminate\Support\Facades\Artisan::output() . "<br>";
+        
+        // Run migrations
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        $output .= "Migrations run: " . \Illuminate\Support\Facades\Artisan::output() . "<br>";
+        
+        return "Deployment help executed successfully:<br>" . $output;
+    } catch (\Throwable $e) {
+        return "Error: " . $e->getMessage() . "<br>File: " . $e->getFile() . " on line " . $e->getLine();
+    }
+});
+
 // Fallback route for dynamic pages
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');
