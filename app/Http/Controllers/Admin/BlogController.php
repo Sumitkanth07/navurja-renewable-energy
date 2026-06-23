@@ -56,6 +56,17 @@ class BlogController extends Controller
             'content' => 'required',
             'meta_title' => 'nullable|max:180',
             'meta_description' => 'nullable|max:300',
+        ], [
+            'blog_category_id.exists' => 'The selected blog category is invalid.',
+            'title.required' => 'Please enter the blog title.',
+            'title.max' => 'The title cannot exceed 180 characters.',
+            'slug.unique' => 'This slug is already in use by another blog post.',
+            'slug.max' => 'The slug cannot exceed 200 characters.',
+            'featured_image.image' => 'The featured file must be a valid image.',
+            'featured_image.max' => 'The featured image size must not exceed 4MB.',
+            'content.required' => 'Please write some content for the blog post.',
+            'meta_title.max' => 'The SEO title cannot exceed 180 characters.',
+            'meta_description.max' => 'The SEO description cannot exceed 300 characters.',
         ]);
     }
 }

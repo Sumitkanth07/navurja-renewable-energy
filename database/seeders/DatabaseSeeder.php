@@ -45,6 +45,46 @@ class DatabaseSeeder extends Seeder
             'copyright_text' => 'Copyright '.date('Y').' Navurja. All rights reserved.',
         ]);
 
+        \App\Models\Location::updateOrCreate(['id' => 1], [
+            'office_name' => 'Navurja Head Office',
+            'address' => 'New Delhi, India',
+            'city' => 'New Delhi',
+            'state' => 'Delhi',
+            'country' => 'India',
+            'pincode' => '110001',
+            'phone' => '+91 9876543210',
+            'alt_phone' => '+91 9876543211',
+            'email' => 'info@navurja.com',
+            'map_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.135688537682!2d77.2183204!3d28.6256847!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd34208a05c3%3A0xcf8b88f1abeb2145!2sConnaught%20Place%2C%20New%20Delhi%2C%20Delhi!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin',
+            'latitude' => '28.6256847',
+            'longitude' => '77.2183204',
+            'working_hours' => 'Mon - Sat: 9:00 AM - 6:00 PM'
+        ]);
+
+        foreach ([
+            'cookie_consent_enabled' => '1',
+            'cookie_popup_title' => 'We Value Your Privacy',
+            'cookie_popup_content' => 'This website uses cookies to ensure you get the best experience.',
+            'cookie_accept_text' => 'Accept',
+            'cookie_reject_text' => 'Decline',
+            'cookie_consent_expiry' => '30',
+        ] as $key => $value) {
+            Setting::putValue($key, $value);
+        }
+
+        foreach ([
+            ['Privacy Policy', 'privacy-policy', '<p>This is the Privacy Policy page. Here you can describe how you collect, use, and protect user data.</p>'],
+            ['Terms & Conditions', 'terms-and-conditions', '<p>This is the Terms & Conditions page. Here you can outline the rules and guidelines for using your website.</p>'],
+            ['Cookie Policy', 'cookie-policy', '<p>This is the Cookie Policy page. Here you can describe how cookies are used on this site.</p>'],
+            ['DMCA Policy', 'dmca-policy', '<p>This is the DMCA Policy page. Here you can outline the policy regarding copyright infringement claims.</p>'],
+        ] as [$title, $slug, $content]) {
+            \App\Models\Page::updateOrCreate(['slug' => $slug], [
+                'title' => $title,
+                'content' => $content,
+                'is_published' => true,
+            ]);
+        }
+
         foreach ([['Home','#home',1],['About','#about',2],['Services','#services',3],['Projects','#projects',4],['Blog','/blog',5],['Calculator','/calculator',6],['Contact','#contact',7]] as [$label,$url,$order]) {
             NavigationItem::updateOrCreate(['label' => $label], ['url' => $url, 'sort_order' => $order, 'is_active' => true]);
         }
