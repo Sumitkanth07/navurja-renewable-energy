@@ -86,7 +86,14 @@ Route::get('storage/{path}', function ($path) {
     if (!file_exists($fullPath) || is_dir($fullPath)) {
         abort(404);
     }
-    return response()->file($fullPath);
+    
+    // Serve file natively to prevent large headers causing Nginx 502 errors on shared hosts
+    $mime = mime_content_type($fullPath);
+    header("Content-Type: " . $mime);
+    header("Content-Length: " . filesize($fullPath));
+    header("Cache-Control: public, max-age=31536000");
+    readfile($fullPath);
+    exit;
 })->where('path', '.*')->name('storage.local');
 
 Route::get('/debug-deploy-help', function() {
