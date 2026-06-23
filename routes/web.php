@@ -139,6 +139,18 @@ Route::get('/debug-deploy-help', function() {
             $output .= str_replace(dirname(public_path()), '', $img) . "<br>";
         }
         
+        $output .= "<b>Database values on production:</b><br>";
+        $output .= "logo: " . \App\Models\Setting::getValue('logo') . "<br>";
+        $output .= "favicon: " . \App\Models\Setting::getValue('favicon') . "<br>";
+        $heroSec = \App\Models\HomepageSection::where('key', 'hero')->first();
+        if ($heroSec) {
+            $output .= "hero image: " . ($heroSec->hero_image ?? $heroSec->image) . "<br>";
+        }
+        $aboutSec = \App\Models\HomepageSection::where('key', 'about')->first();
+        if ($aboutSec) {
+            $output .= "about image: " . $aboutSec->image . "<br>";
+        }
+        
         return "Deployment help executed successfully:<br>" . $output;
     } catch (\Throwable $e) {
         return "Error: " . $e->getMessage() . "<br>File: " . $e->getFile() . " on line " . $e->getLine();
