@@ -109,6 +109,16 @@ Route::get('/debug-deploy-help', function() {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $output .= "Migrations run: " . \Illuminate\Support\Facades\Artisan::output() . "<br>";
         
+        // List uploads
+        $uploadsDir = storage_path('app/public/uploads');
+        if (is_dir($uploadsDir)) {
+            $files = scandir($uploadsDir);
+            $output .= "<b>Uploads directory files:</b><br>";
+            $output .= implode("<br>", $files) . "<br>";
+        } else {
+            $output .= "<b>Uploads directory NOT found at: {$uploadsDir}</b><br>";
+        }
+        
         return "Deployment help executed successfully:<br>" . $output;
     } catch (\Throwable $e) {
         return "Error: " . $e->getMessage() . "<br>File: " . $e->getFile() . " on line " . $e->getLine();
