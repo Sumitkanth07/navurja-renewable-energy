@@ -109,14 +109,32 @@ Route::get('/debug-deploy-help', function() {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $output .= "Migrations run: " . \Illuminate\Support\Facades\Artisan::output() . "<br>";
         
-        // List uploads
-        $uploadsDir = storage_path('app/public/uploads');
-        if (is_dir($uploadsDir)) {
-            $files = scandir($uploadsDir);
-            $output .= "<b>Uploads directory files:</b><br>";
-            $output .= implode("<br>", $files) . "<br>";
-        } else {
-            $output .= "<b>Uploads directory NOT found at: {$uploadsDir}</b><br>";
+        // Scan storage and public folders to find where files are stored
+        $pathsToCheck = [
+            'storage_app_public' => storage_path('app/public'),
+            'storage_app' => storage_path('app'),
+            'public_path' => public_path(),
+            'parent_public_html' => dirname(public_path()),
+        ];
+        
+        foreach ($pathsToCheck as $name => $path) {
+            $output .= "<b>Scanning {$name} ({$path}):</b><br>";
+            if (is_dir($path)) {
+                $files = scandir($path);
+                $cleanFiles = array_filter($files, function($f) { return $f !== '.' && $f !== '..'; });
+                $output .= implode(", ", $cleanFiles) . "<br>";
+                
+                // If there's an uploads directory inside, scan it
+                $uploadsSub = $path . '/uploads';
+                if (is_dir($uploadsSub)) {
+                    $output .= "  -- found uploads subdirectory, scanning:<br>";
+                    $subFiles = scandir($uploadsSub);
+                    $cleanSubFiles = array_filter($subFiles, function($f) { return $f !== '.' && $f !== '..'; });
+                    $output .= "  " . implode(", ", $cleanSubFiles) . "<br>";
+                }
+            } else {
+                $output .= "  Directory does not exist.<br>";
+            }
         }
         
         return "Deployment help executed successfully:<br>" . $output;
