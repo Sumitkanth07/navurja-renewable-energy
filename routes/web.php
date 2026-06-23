@@ -89,9 +89,30 @@ Route::get('storage/{path}', function ($path) {
     
     // Serve file natively to prevent large headers causing Nginx 502 errors on shared hosts
     $mime = mime_content_type($fullPath);
+    $lastModified = filemtime($fullPath);
+    $etag = sprintf('"%x-%x"', $lastModified, filesize($fullPath));
+
     header("Content-Type: " . $mime);
-    header("Content-Length: " . filesize($fullPath));
     header("Cache-Control: public, max-age=31536000");
+    header("ETag: " . $etag);
+    header("Last-Modified: " . gmdate('D, d M Y H:i:s', $lastModified) . ' GMT');
+
+    // Check If-None-Match
+    if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && trim($_SERVER['HTTP_IF_NONE_MATCH']) === $etag) {
+        http_response_code(304);
+        exit;
+    }
+
+    // Check If-Modified-Since
+    if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+        $ifModifiedSince = strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
+        if ($ifModifiedSince !== false && $ifModifiedSince >= $lastModified) {
+            http_response_code(304);
+            exit;
+        }
+    }
+
+    header("Content-Length: " . filesize($fullPath));
     readfile($fullPath);
     exit;
 })->where('path', '.*')->name('storage.local');
