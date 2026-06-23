@@ -139,16 +139,53 @@ Route::get('/debug-deploy-help', function() {
             $output .= str_replace(dirname(public_path()), '', $img) . "<br>";
         }
         
-        $output .= "<b>Database values on production:</b><br>";
-        $output .= "logo: " . \App\Models\Setting::getValue('logo') . "<br>";
-        $output .= "favicon: " . \App\Models\Setting::getValue('favicon') . "<br>";
+        // Heal database image paths
+        \App\Models\Setting::putValue('logo', 'uploads/oj0IKH8nXvcRQuZlOdAmJ9f7QmaAJ5Fj3XYsjZrZ.jpg');
+        
         $heroSec = \App\Models\HomepageSection::where('key', 'hero')->first();
         if ($heroSec) {
-            $output .= "hero image: " . ($heroSec->hero_image ?? $heroSec->image) . "<br>";
+            $heroSec->update(['hero_image' => 'uploads/1TxzFM03wGXubkkZHh990lkkCYjdX0UF49iL7Kdr.png', 'image' => null]);
         }
         $aboutSec = \App\Models\HomepageSection::where('key', 'about')->first();
         if ($aboutSec) {
-            $output .= "about image: " . $aboutSec->image . "<br>";
+            $aboutSec->update(['image' => 'uploads/VSCVh8AAND6VTUPFhVUvNSrmvUXPBhbvMOxzPM11.png']);
+        }
+        $whySec = \App\Models\HomepageSection::where('key', 'why')->first();
+        if ($whySec) {
+            $whySec->update(['image' => 'uploads/7EB835wnr9L3YQa5sD5k8MZ39iTANHU5t7mbv4My.png']);
+        }
+        
+        $blog1 = \App\Models\Blog::where('slug', 'benefits-of-renewable-energy')->first();
+        if ($blog1) {
+            $blog1->update(['featured_image' => 'uploads/NjbRezlePMh0pTiVDZlnSD5Bl1eusfixtY7OcNAb.png']);
+        }
+        $blog2 = \App\Models\Blog::where('slug', 'powering-a-sustainable-future-with-smart-renewable-energy-solutions')->first();
+        if ($blog2) {
+            $blog2->update(['featured_image' => 'uploads/fE6XP758lkJwpx4MLQwtOhIbP7WbgWVA1I6CT0N1.png']);
+        }
+        
+        $projects = \App\Models\Project::all();
+        $projectImages = [
+            'uploads/6yE0mUvKnv8ljU558VA1XYC3GDMxxg7dGqQDyNc8.png',
+            'uploads/5EvSPUDOfRSQQISku9uw23ZUEErLKClSDanMGsRx.png',
+            'uploads/r5oqzc0IAYivsSwqkIYafnA2SuqEDi74hx969HLf.png',
+        ];
+        $i = 0;
+        foreach ($projects as $proj) {
+            if (isset($projectImages[$i])) {
+                $proj->update(['image' => $projectImages[$i]]);
+                $i++;
+            }
+        }
+        
+        $output .= "<b>Database values healed and updated:</b><br>";
+        $output .= "logo: " . \App\Models\Setting::getValue('logo') . "<br>";
+        $output .= "favicon: " . \App\Models\Setting::getValue('favicon') . "<br>";
+        if ($heroSec) {
+            $output .= "hero image: " . ($heroSec->fresh()->hero_image ?? $heroSec->fresh()->image) . "<br>";
+        }
+        if ($aboutSec) {
+            $output .= "about image: " . $aboutSec->fresh()->image . "<br>";
         }
         
         return "Deployment help executed successfully:<br>" . $output;
