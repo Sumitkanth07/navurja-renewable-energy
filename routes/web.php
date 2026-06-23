@@ -109,32 +109,34 @@ Route::get('/debug-deploy-help', function() {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $output .= "Migrations run: " . \Illuminate\Support\Facades\Artisan::output() . "<br>";
         
-        // Scan storage and public folders to find where files are stored
-        $pathsToCheck = [
-            'storage_app_public' => storage_path('app/public'),
-            'storage_app' => storage_path('app'),
-            'public_path' => public_path(),
-            'parent_public_html' => dirname(public_path()),
-        ];
-        
-        foreach ($pathsToCheck as $name => $path) {
-            $output .= "<b>Scanning {$name} ({$path}):</b><br>";
-            if (is_dir($path)) {
-                $files = scandir($path);
-                $cleanFiles = array_filter($files, function($f) { return $f !== '.' && $f !== '..'; });
-                $output .= implode(", ", $cleanFiles) . "<br>";
-                
-                // If there's an uploads directory inside, scan it
-                $uploadsSub = $path . '/uploads';
-                if (is_dir($uploadsSub)) {
-                    $output .= "  -- found uploads subdirectory, scanning:<br>";
-                    $subFiles = scandir($uploadsSub);
-                    $cleanSubFiles = array_filter($subFiles, function($f) { return $f !== '.' && $f !== '..'; });
-                    $output .= "  " . implode(", ", $cleanSubFiles) . "<br>";
+        // Recursively search for image files
+        $findImages = function($dir) use (&$findImages) {
+            $results = [];
+            if (!is_dir($dir)) return $results;
+            $files = @scandir($dir);
+            if (!$files) return $results;
+            foreach ($files as $file) {
+                if ($file === '.' || $file === '..') continue;
+                $full = $dir . '/' . $file;
+                if (is_dir($full)) {
+                    // Skip node_modules and vendor to be fast
+                    if (str_contains($full, 'node_modules') || str_contains($full, 'vendor') || str_contains($full, '.git')) continue;
+                    $results = array_merge($results, $findImages($full));
+                } else {
+                    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                    if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'ico'])) {
+                        $results[] = $full;
+                    }
                 }
-            } else {
-                $output .= "  Directory does not exist.<br>";
+                if (count($results) > 200) break;
             }
+            return $results;
+        };
+        
+        $output .= "<b>Found image files on production:</b><br>";
+        $foundImages = $findImages(dirname(public_path()));
+        foreach ($foundImages as $img) {
+            $output .= str_replace(dirname(public_path()), '', $img) . "<br>";
         }
         
         return "Deployment help executed successfully:<br>" . $output;
