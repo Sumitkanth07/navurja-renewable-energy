@@ -89,5 +89,20 @@ Route::get('storage/{path}', function ($path) {
     return response()->file($fullPath);
 })->where('path', '.*')->name('storage.local');
 
+Route::get('/debug-deploy-help', function() {
+    try {
+        $logPath = storage_path('logs/laravel.log');
+        if (file_exists($logPath)) {
+            $lines = file($logPath);
+            $lastLines = array_slice($lines, -150);
+            return "<pre>" . implode("", $lastLines) . "</pre>";
+        } else {
+            return "Log file not found at: " . $logPath;
+        }
+    } catch (\Throwable $e) {
+        return "Error: " . $e->getMessage();
+    }
+});
+
 // Fallback route for dynamic pages
 Route::get('/{slug}', [PageController::class, 'show'])->name('page.show');
