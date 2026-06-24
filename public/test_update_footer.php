@@ -4,7 +4,8 @@ define('LARAVEL_START', microtime(true));
 require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+$kernel->handle(Illuminate\Http\Request::create('/robots.txt', 'GET'));
 
 use App\Models\FooterSetting;
 
