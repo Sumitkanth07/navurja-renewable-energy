@@ -28,7 +28,12 @@ $data = [
     'twitter_url' => 'https://twitter.com/navurja'
 ];
 
-$footer = FooterSetting::query()->updateOrCreate(['id' => 1], $data);
-
-echo "PRODUCTION DATABASE UPDATED SUCCESSFULLY!<br>";
-print_r($footer->toArray());
+try {
+    $footer = FooterSetting::query()->updateOrCreate(['id' => 1], $data);
+    echo "PRODUCTION DATABASE UPDATED SUCCESSFULLY!<br>";
+    print_r($footer->toArray());
+} catch (\Throwable $e) {
+    echo "Error: " . $e->getMessage() . "<br>";
+    echo "File: " . $e->getFile() . " on line " . $e->getLine() . "<br>";
+    echo "<pre>" . $e->getTraceAsString() . "</pre>";
+}
